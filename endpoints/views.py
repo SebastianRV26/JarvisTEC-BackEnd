@@ -32,11 +32,18 @@ def load_r_model(file_path, values):
     return result
 
 
-# GET /RLMinR/<str:values>/
+# GET /RLMinR/<int:model_id>/<str:values>/
 class LoadRLMModel(View):
     @staticmethod
-    def get(request, values):
-        path = "./models/BikesModelRLM.rds"
+    def get(request, model_id, values):
+        if model_id == 1:
+            model = "BikesModelRLM"
+        elif model_id == 2:
+            model = "CarsModelRLM"
+        else:
+            model = "InvalidModel"
+            print("Modelo inválido")
+        path = f"./models/{model}.rds"
 
         value = load_r_model(path, values)
         response = {'code': 200, 'data': value}
@@ -55,13 +62,29 @@ def load_python_model(file_path, columns_names, rows):
     return result
 
 
-# GET /pythonModel/
+# GET /pythonModel/<int:model_id>/
 class LoadDecisionTreePython(View):
     @staticmethod
-    def get(request):
-        path = "./models/telco_model.sav"
-        columns = ['tenure', 'MonthlyCharges', 'TotalCharges', 'TechSupport']
-        rows = [[1], [68.65], [68.65], [0]]
+    def get(request, model_id, rows_values):
+        if model_id == 1:
+            name = "telco_model"
+            columns = ['tenure', 'MonthlyCharges', 'TotalCharges', 'TechSupport']
+        elif model_id == 2:
+            name = "avocado_model"
+            columns = ['Total Volume', '4046', '4225', '4770', 'Total Bags', 'Small Bags', 'Large Bags', 'XLarge Bags',
+                       'type', 'year']
+        elif model_id == 3:
+            name = "wine_model"
+            columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides',
+                       'free sulfur dioxide', 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'white']
+        else:
+            name = "invalid_model"
+            columns = []
+        path = f"./models/{name}.sav"
+
+        rows = rows_values.split(',')
+        print(rows)
+        #rows = [[1], [68.65], [68.65], [0]]
         value = load_python_model(path, columns, rows)
         response = {'code': 200, 'data': str(value)}
         return JsonResponse(response)
