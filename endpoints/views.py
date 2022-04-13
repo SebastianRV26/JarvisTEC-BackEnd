@@ -41,13 +41,20 @@ class LoadRLMModel(View):
         elif model_id == 2:
             model = "CarsModelRLM"
         else:
-            model = "InvalidModel"
-            print("Modelo inválido")
+            value = "Modelo invalido"
+            response = {'code': 404, 'data': value}
+            return JsonResponse(response)
+
         path = f"./models/{model}.rds"
 
-        value = load_r_model(path, values)
-        response = {'code': 200, 'data': value}
-        return JsonResponse(response)
+        try:
+            value = load_r_model(path, values)
+            response = {'code': 200, 'data': value}
+            return JsonResponse(response)
+        except ValueError:
+            value = "Hay mas o menos parametros de los esperados, intente de nuevo"
+            response = {'code': 400, 'data': value}
+            return JsonResponse(response)
 
 
 def load_python_model(file_path, columns_names, rows):
@@ -78,13 +85,17 @@ class LoadDecisionTreePython(View):
             columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides',
                        'free sulfur dioxide', 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'white']
         else:
-            name = "invalid_model"
-            columns = []
+            value = "Modelo invalido"
+            response = {'code': 404, 'data': value}
+            return JsonResponse(response)
         path = f"./models/{name}.sav"
 
         rows = rows_values.split(',')
-        print(rows)
-        #rows = [[1], [68.65], [68.65], [0]]
-        value = load_python_model(path, columns, rows)
-        response = {'code': 200, 'data': str(value)}
-        return JsonResponse(response)
+        try:
+            value = load_python_model(path, columns, rows)
+            response = {'code': 200, 'data': str(value)}
+            return JsonResponse(response)
+        except ValueError:
+            value = "Hay mas o menos parametros de los esperados, intente de nuevo con la cantidad correcta de parametros"
+            response = {'code': 400, 'data': value}
+            return JsonResponse(response)
