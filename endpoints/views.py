@@ -84,6 +84,19 @@ class LoadDecisionTreePython(View):
             name = "wine_model"
             columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides',
                        'free sulfur dioxide', 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'white']
+        elif model_id == 4:
+            name = "covid19Model"
+            columns = ['1/22/20', '1/23/20', '1/24/20', '1/25/20', '1/26/20', '1/27/20',
+                       '1/28/20', '1/29/20', '1/30/20', '1/31/20', '...',
+                       '5/20/21', '5/21/21', '5/22/21', '5/23/21', '5/24/21', '5/25/21',
+                       '5/26/21', '5/27/21', '5/28/21', '5/29/21']
+        elif model_id == 5:
+            name = "companyInventory"
+            columns = ['store', 'item', 'year', 'month', 'day', 'week', 'weekofyear',
+                       'dayofweek', 'weekday', 'dayofyear', 'quarter']
+        elif model_id == 6:
+            name = "S&P500stock"
+            columns = ['Numbers']
         else:
             value = "Modelo invalido"
             response = {'code': 404, 'data': value}
