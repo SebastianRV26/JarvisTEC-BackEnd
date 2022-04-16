@@ -1,11 +1,10 @@
-from django.shortcuts import render
-from django.views import View
-from django.http import JsonResponse
-from django.forms.models import model_to_dict
-
-from rpy2.robjects import r
 import pickle
+
 import pandas as pd
+from django.http import JsonResponse
+from django.views import View
+from rpy2.robjects import r
+from sklearn.preprocessing import StandardScaler
 
 
 class Endpoints(View):
@@ -57,12 +56,16 @@ class LoadRLMModel(View):
             return JsonResponse(response)
 
 
-def load_python_model(file_path, columns_names, rows):
+def load_python_model(file_path, columns_names, rows, scale=False):
     model_reloaded = pickle.load(open(file_path, 'rb'))
 
     # convert list into DataFrame
     df = pd.DataFrame(rows).transpose()
     df.columns = columns_names
+
+    if scale:
+        scaler = StandardScaler()
+        df = scaler.fit_transform(df)
 
     result = model_reloaded.predict(df)[0]
     print(f"result of {file_path} = {result}")
@@ -84,6 +87,16 @@ class LoadDecisionTreePython(View):
             name = "wine_model"
             columns = ['fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar', 'chlorides',
                        'free sulfur dioxide', 'total sulfur dioxide', 'density', 'pH', 'sulphates', 'alcohol', 'white']
+        elif model_id == 4:
+            name = "bodyfat-model"
+            columns = ['Density', 'Chest', 'Abdomen']
+        elif model_id == 5:
+            name = "hepatitis-model"
+            columns = ['Sex', 'Age', 'ALB', 'ALP', 'ALT', 'AST', 'BIL', 'CHE', 'CHOL', 'CREA', 'GGT', 'PROT']
+        elif model_id == 6:
+            name = "stroke-model"
+            columns = ['gender', 'age', 'hypertension', 'heart_disease', 'ever_married',
+                       'work_type', 'Residence_type', 'avg_glucose_level', 'bmi', 'smoking_status']
         else:
             value = "Modelo invalido"
             response = {'code': 404, 'data': value}
@@ -92,7 +105,10 @@ class LoadDecisionTreePython(View):
 
         rows = rows_values.split(',')
         try:
-            value = load_python_model(path, columns, rows)
+            if model_id == 4 or model_id == 5 or model_id == 6:
+                value = load_python_model(path, columns, rows, True)
+            else:
+                value = load_python_model(path, columns, rows)
             response = {'code': 200, 'data': str(value)}
             return JsonResponse(response)
         except ValueError:
