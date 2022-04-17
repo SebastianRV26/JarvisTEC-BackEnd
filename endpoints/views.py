@@ -40,6 +40,8 @@ class LoadRLMModel(View):
             model = "BikesModelRLM"
         elif model_id == 2:
             model = "CarsModelRLM"
+        elif model_id == 3:
+            model = "ClimaModelRLM"
         else:
             value = "Modelo invalido"
             response = {'code': 404, 'data': value}
