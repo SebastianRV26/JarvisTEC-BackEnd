@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from rpy2.robjects.packages import importr
 
 
 def main():
@@ -19,4 +20,7 @@ def main():
 
 
 if __name__ == '__main__':
+    utils = importr('utils')
+    utils.chooseCRANmirror(ind=1)
+    utils.install_packages('e1071')
     main()
