@@ -107,7 +107,7 @@ class LoadDecisionTreePython(View):
         elif model_id == 8:
             name = "stroke-model"
             columns = ['gender', 'age', 'hypertension', 'heart_disease', 'ever_married',
-                       'work_type', 'Residence_type', 'avg_glucose_level', 'bmi', 'smoking_status
+                       'work_type', 'Residence_type', 'avg_glucose_level', 'bmi', 'smoking_status']
         else:
             value = "Modelo invalido"
             response = {'code': 404, 'data': value}
