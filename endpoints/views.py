@@ -116,7 +116,7 @@ class LoadDecisionTreePython(View):
 
         rows = rows_values.split(',')
         try:
-            if model_id == 7 or model_id == 8 or model_id == 9:
+            if model_id == 6 or model_id == 7 or model_id == 8:
                 value = load_python_model(path, columns, rows, True)
             else:
                 value = load_python_model(path, columns, rows)
