@@ -155,3 +155,13 @@ class FaceApi(View):
         img = Image.open(file)
         img.show()
         return JsonResponse({'code': 200, 'data': "Face"})
+
+
+class VoiceApi(View):
+    @staticmethod
+    def post(request):
+        file = request.FILES["data"]
+        with open("./tmp/audio.wav", "wb") as aud:
+            aud_stream = file.read()
+            aud.write(aud_stream)
+        return JsonResponse({'code': 200, 'data': "Predecir aguacate"})

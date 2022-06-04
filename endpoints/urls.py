@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import Endpoints, GetByValue, LoadRLMModel, LoadDecisionTreePython, ObjectDetector, DetectorResults, FaceApi
+from .views import Endpoints, GetByValue, LoadRLMModel, LoadDecisionTreePython, ObjectDetector, DetectorResults, \
+    FaceApi, VoiceApi
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -11,4 +12,5 @@ urlpatterns = [
     path('objectDetector/', ObjectDetector.as_view(), name='objectDetector'),
     path('detectorResults/', DetectorResults.as_view(), name='detectorResults'),
     path('face/', FaceApi.as_view(), name='face'),
+    path('voice/', VoiceApi.as_view(), name='voice'),
 ]
