@@ -7,6 +7,7 @@ from rpy2.robjects import r
 from sklearn.preprocessing import StandardScaler
 
 from providers.YoloProvider import YoloProvider
+from PIL import Image
 
 
 class Endpoints(View):
@@ -145,3 +146,12 @@ class DetectorResults(View):
         if YoloProvider.thread_is_running():
             return JsonResponse({'code': 200, 'data': "Proceso corriendo"})
         return JsonResponse({'code': 200, 'data': YoloProvider.get_detections()})
+
+
+class FaceApi(View):
+    @staticmethod
+    def post(request):
+        file = request.FILES["data"]
+        img = Image.open(file)
+        img.show()
+        return JsonResponse({'code': 200, 'data': "Face"})

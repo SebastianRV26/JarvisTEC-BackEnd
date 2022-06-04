@@ -1,5 +1,6 @@
-from django.urls import path, include
-from .views import Endpoints, GetByValue, LoadRLMModel, LoadDecisionTreePython, ObjectDetector, DetectorResults
+from django.urls import path
+
+from .views import Endpoints, GetByValue, LoadRLMModel, LoadDecisionTreePython, ObjectDetector, DetectorResults, FaceApi
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -9,4 +10,5 @@ urlpatterns = [
     path('pythonModel/<int:model_id>/<str:rows_values>/', LoadDecisionTreePython.as_view(), name='PythonModel'),
     path('objectDetector/', ObjectDetector.as_view(), name='objectDetector'),
     path('detectorResults/', DetectorResults.as_view(), name='detectorResults'),
+    path('face/', FaceApi.as_view(), name='face'),
 ]
