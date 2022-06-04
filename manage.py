@@ -4,6 +4,8 @@ import os
 import sys
 from rpy2.robjects.packages import importr
 
+from providers.YoloProvider import YoloProvider
+
 
 def main():
     """Run administrative tasks."""
@@ -23,4 +25,5 @@ if __name__ == '__main__':
     utils = importr('utils')
     utils.chooseCRANmirror(ind=1)
     utils.install_packages('e1071')
+    YoloProvider.get_model()
     main()

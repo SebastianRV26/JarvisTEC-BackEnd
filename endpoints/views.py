@@ -6,6 +6,8 @@ from django.views import View
 from rpy2.robjects import r
 from sklearn.preprocessing import StandardScaler
 
+from providers.YoloProvider import YoloProvider
+
 
 class Endpoints(View):
     def get(self, request):
@@ -126,3 +128,20 @@ class LoadDecisionTreePython(View):
             value = "Hay mas o menos parametros de los esperados, intente de nuevo con la cantidad correcta de parametros"
             response = {'code': 400, 'data': value}
             return JsonResponse(response)
+
+
+class ObjectDetector(View):
+    def get(self, request):
+        video_url = self.request.GET.get('url')
+        if YoloProvider.thread_is_running():
+            return {'code': 200, 'data': "Ya hay un proceso corriendo"}
+        YoloProvider.run_thread(video_url)
+        return JsonResponse({'code': 200, 'data': {}})
+
+
+class DetectorResults(View):
+    @staticmethod
+    def get(request):
+        if YoloProvider.thread_is_running():
+            return JsonResponse({'code': 200, 'data': "Proceso corriendo"})
+        return JsonResponse({'code': 200, 'data': YoloProvider.get_detections()})
